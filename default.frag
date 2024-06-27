@@ -24,11 +24,14 @@ uniform int maxIter;
 void main()
 {
 	// uv coordinates originally go from 0 to 1.
-	// with the following operations, we transform the coordinates so they go from -1 to 1
-	// and the center of the canvas is now (0, 0).
-	vec2 uv0 = gl_FragCoord.xy / iResolution.xy * 2.0 - 1.0;
+	// with the following operations, we transform the coordinates so they go to a new rang
+	vec2 uv0;
+	
+	uv0.x = (gl_FragCoord.x / iResolution.x - 0.5f) * 2.24f - 0.5f;
 
-	// Scale the u coordinate so that it's interval from -1 to 1 spans the same number of pixels as the y coordinate.
+	uv0.y = (gl_FragCoord.y / iResolution.y - 0.5f) * 2.24f;
+
+	// Fix the aspect ratio
 	uv0.x *= iResolution.x / iResolution.y;
 
 	float reZ = 0.0;
@@ -44,5 +47,7 @@ void main()
 		iter += 1;
 	}
 
-	FragColor = vec4(palette(float(iter)/float(maxIter)), 1.0f);
+	float col = 1.0f - float(iter)/float(maxIter);
+
+	FragColor = vec4(col, 0.0f, col, 1.0f);
 }
