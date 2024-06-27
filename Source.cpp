@@ -90,6 +90,10 @@ int main()
 	GLuint timeUniformID = glGetUniformLocation(shaderProgram.ID, "iTime");
 	GLuint resolutionUniformID = glGetUniformLocation(shaderProgram.ID, "iResolution");
 
+	GLuint maxIterID = glGetUniformLocation(shaderProgram.ID, "maxIter");
+	shaderProgram.Activate();
+	glUniform1i(maxIterID, 100);
+
 	int framebufferWidth, framebufferHeight;
 	// Restart the GLFW timer and start main while loop 
 	glfwSetTime(0.0);

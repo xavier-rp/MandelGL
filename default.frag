@@ -19,6 +19,8 @@ out vec4 FragColor;
 uniform float iTime;
 uniform vec2  iResolution;
 
+uniform int maxIter;
+
 void main()
 {
 	// uv coordinates originally go from 0 to 1.
@@ -29,8 +31,18 @@ void main()
 	// Scale the u coordinate so that it's interval from -1 to 1 spans the same number of pixels as the y coordinate.
 	uv0.x *= iResolution.x / iResolution.y;
 
-	// Time varying pixel color
-    vec3 col = 0.5 + 0.5*cos(iTime+uv0.xyx+vec3(0,2,4));
+	float reZ = 0.0;
+	float imZ = 0.0;
+	float reZtemp = 0.0;
+	int	  iter = 0;
 
-	FragColor = vec4(col, 1.0f);
+	while (reZ*reZ + imZ*imZ <= 2.0f && iter < maxIter )
+	{
+		reZtemp = reZ*reZ - imZ*imZ + uv0.x;
+		imZ = 2*reZ*imZ + uv0.y;
+		reZ = reZtemp;
+		iter += 1;
+	}
+
+	FragColor = vec4(palette(float(iter)/float(maxIter)), 1.0f);
 }
