@@ -37,22 +37,9 @@ bool keyPressed(GLFWwindow* window, int key)
 	return glfwGetKey(window, key) == GLFW_PRESS;
 }
 
-/*
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-	shaderProgram.Activate();
-
-	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS) 
-	{
-		GLfloat positionValue;
-		glUniform1f(xPosUniformID, glGetUniformfv(shaderProgram.ID, glGetUniformLocation(shaderProgram.ID, "uniformName"), &positionValue));
-	}
-}
-*/
-
 int main()
 {
-	const char* fragmentShader = "julia.frag";
+	const char* fragmentShader = "mandel.frag";
 	// Initialize GLFW
 	glfwInit();
 
@@ -188,8 +175,6 @@ int main()
 		}
 		
 	}
-
-
 
 	// Delete all the objects we've created
 	VAO1.Delete();
