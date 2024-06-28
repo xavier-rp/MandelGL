@@ -52,6 +52,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 int main()
 {
+	const char* fragmentShader = "julia.frag";
 	// Initialize GLFW
 	glfwInit();
 
@@ -83,8 +84,8 @@ int main()
 	//Load GLAD so it configures OpenGL
 	gladLoadGL();
 
-	// Generates Shader object using shaders defualt.vert and default.frag
-	Shader shaderProgram("default.vert", "default.frag");
+	// Generates Shader object using shaders default.vert and default.frag
+	Shader shaderProgram("default.vert", fragmentShader);
 
 	// Generates Vertex Array Object and binds it
 	VAO VAO1;
@@ -115,8 +116,10 @@ int main()
 	GLuint zoomUniformID = glGetUniformLocation(shaderProgram.ID, "zoomFactor");
 	float zoomFactorValue = 1.0f;
 	GLuint maxIterUniformID = glGetUniformLocation(shaderProgram.ID, "maxIter");
+	GLuint cUniformID = glGetUniformLocation(shaderProgram.ID, "c");
+	
 	shaderProgram.Activate();
-	glUniform1i(maxIterUniformID, 1000);
+	glUniform1i(maxIterUniformID, 5000);
 	glUniform1f(xPosUniformID, xPosValue);
 	glUniform1f(yPosUniformID, yPosValue);
 	glUniform1f(zoomUniformID, zoomFactorValue);
@@ -139,6 +142,10 @@ int main()
 		glUniform1f(timeUniformID, float(glfwGetTime()));
 		glfwGetFramebufferSize(window, &framebufferWidth, &framebufferHeight);
 		glUniform2f(resolutionUniformID, GLfloat(framebufferWidth), GLfloat(framebufferHeight));
+		if (fragmentShader == "julia.frag")
+		{
+			glUniform2f(cUniformID, 0.7885f * cos(float(glfwGetTime()) / 3.0f), 0.7885f * sin(float(glfwGetTime() / 3.0f)));
+		}
 
 		// Draw primitives, number of indices, datatype of indices, index of indices
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

@@ -147,6 +147,7 @@
   <ItemGroup>
     <None Include="default.frag" />
     <None Include="default.vert" />
+    <None Include="julia.frag" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EBO.h" />
