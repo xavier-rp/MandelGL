@@ -41,7 +41,7 @@
     <None Include="default.vert">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="default.frag">
+    <None Include="mandel.frag">
       <Filter>Resource Files\Shaders</Filter>
     </None>
     <None Include="julia.frag">
