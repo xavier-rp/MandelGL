@@ -5,10 +5,10 @@
 // http://dev.thi.ng/gradients/
 vec3 palette(float t)
 {
-	vec3 a = vec3(0.5, 0.5, 0.5);
-	vec3 b = vec3(0.5, 0.5, 0.5); 
-	vec3 c = vec3(1.0, 1.0, 1.0);
-	vec3 d = vec3(0.263, 0.416, 0.557);
+	vec3 a = vec3(0.446, 0.643, 0.160);
+	vec3 b = vec3(0.380, 0.702, 0.684); 
+	vec3 c = vec3(0.351, 1.378, 0.247);
+	vec3 d = vec3(5.039, 2.212, 1.041);
 	return a + b*cos( 6.28318*(c*t+d));
 }
 
@@ -39,7 +39,7 @@ void main()
 	float reZtemp = 0.0;
 	int	  iter = 0;
 
-	while (reZ*reZ + imZ*imZ <= 2.0f && iter < maxIter )
+	while (reZ*reZ + imZ*imZ <= 2.0f && iter < maxIter * abs(sin(iTime/(3.14159)) + 1) )
 	{
 		reZtemp = reZ*reZ - imZ*imZ + uv0.x;
 		imZ = 2*reZ*imZ + uv0.y;
@@ -47,7 +47,7 @@ void main()
 		iter += 1;
 	}
 
-	float col = 1.0f - float(iter)/float(maxIter);
+	float col = float(iter)/float(maxIter);
 
-	FragColor = vec4(col, 0.0f, col, 1.0f);
+	FragColor = vec4( 1.0f - palette(col), 1.0f);
 }
