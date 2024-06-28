@@ -20,6 +20,9 @@ uniform float iTime;
 uniform vec2  iResolution;
 
 uniform int maxIter;
+uniform float xPos;
+uniform float yPos;
+uniform float zoomFactor;
 
 void main()
 {
@@ -27,9 +30,9 @@ void main()
 	// with the following operations, we transform the coordinates so they go to a new rang
 	vec2 uv0;
 	
-	uv0.x = (gl_FragCoord.x / iResolution.x - 0.5f) * 2.24f - 0.5f;
+	uv0.x = (gl_FragCoord.x / iResolution.x - 0.5f) * 2.24f * zoomFactor - 0.5f + xPos;
 
-	uv0.y = (gl_FragCoord.y / iResolution.y - 0.5f) * 2.24f;
+	uv0.y = (gl_FragCoord.y / iResolution.y - 0.5f) * 2.24f * zoomFactor + yPos;
 
 	// Fix the aspect ratio
 	uv0.x *= iResolution.x / iResolution.y;
@@ -39,7 +42,7 @@ void main()
 	float reZtemp = 0.0;
 	int	  iter = 0;
 
-	while (reZ*reZ + imZ*imZ <= 2.0f && iter < maxIter * abs(sin(iTime/(3.14159)) + 1) )
+	while (reZ*reZ + imZ*imZ <= 2.0f && iter < maxIter)
 	{
 		reZtemp = reZ*reZ - imZ*imZ + uv0.x;
 		imZ = 2*reZ*imZ + uv0.y;

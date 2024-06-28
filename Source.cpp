@@ -32,6 +32,24 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	glViewport(0, 0, width, height);
 }
 
+bool keyPressed(GLFWwindow* window, int key)
+{
+	return glfwGetKey(window, key) == GLFW_PRESS;
+}
+
+/*
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	shaderProgram.Activate();
+
+	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS) 
+	{
+		GLfloat positionValue;
+		glUniform1f(xPosUniformID, glGetUniformfv(shaderProgram.ID, glGetUniformLocation(shaderProgram.ID, "uniformName"), &positionValue));
+	}
+}
+*/
+
 int main()
 {
 	// Initialize GLFW
@@ -90,9 +108,18 @@ int main()
 	GLuint timeUniformID = glGetUniformLocation(shaderProgram.ID, "iTime");
 	GLuint resolutionUniformID = glGetUniformLocation(shaderProgram.ID, "iResolution");
 
-	GLuint maxIterID = glGetUniformLocation(shaderProgram.ID, "maxIter");
+	GLuint xPosUniformID = glGetUniformLocation(shaderProgram.ID, "xPos");
+	float xPosValue = 0.0f;
+	GLuint yPosUniformID = glGetUniformLocation(shaderProgram.ID, "yPos");
+	float yPosValue = 0.0f;
+	GLuint zoomUniformID = glGetUniformLocation(shaderProgram.ID, "zoomFactor");
+	float zoomFactorValue = 1.0f;
+	GLuint maxIterUniformID = glGetUniformLocation(shaderProgram.ID, "maxIter");
 	shaderProgram.Activate();
-	glUniform1i(maxIterID, 100);
+	glUniform1i(maxIterUniformID, 1000);
+	glUniform1f(xPosUniformID, xPosValue);
+	glUniform1f(yPosUniformID, yPosValue);
+	glUniform1f(zoomUniformID, zoomFactorValue);
 
 	int framebufferWidth, framebufferHeight;
 	// Restart the GLFW timer and start main while loop 
@@ -119,6 +146,40 @@ int main()
 		glfwSwapBuffers(window);
 		// Take care of all GLFW events
 		glfwPollEvents();
+
+		if (keyPressed(window, GLFW_KEY_RIGHT)) 
+		{
+			xPosValue += 2.24f / 1000.0f * zoomFactorValue;
+			glUniform1f(xPosUniformID, xPosValue);
+		}
+		if (keyPressed(window, GLFW_KEY_LEFT))
+		{
+			xPosValue -= 2.24f / 1000.0f * zoomFactorValue;
+			glUniform1f(xPosUniformID, xPosValue);
+		}
+		if (keyPressed(window, GLFW_KEY_UP))
+		{
+			yPosValue += 2.24f / 1000.0f * zoomFactorValue;
+			glUniform1f(yPosUniformID, yPosValue);
+		}
+		if (keyPressed(window, GLFW_KEY_DOWN))
+		{
+			yPosValue -= 2.24f / 1000.0f * zoomFactorValue;
+			glUniform1f(yPosUniformID, yPosValue);
+		}
+		if (keyPressed(window, GLFW_KEY_W))
+		{
+			zoomFactorValue *= 0.999f;
+			zoomFactorValue = std::max(0.0000001f, zoomFactorValue);
+			glUniform1f(zoomUniformID, zoomFactorValue);
+		}
+		if (keyPressed(window, GLFW_KEY_S))
+		{
+			zoomFactorValue /= 0.999f;
+			zoomFactorValue = std::min(3.0f, zoomFactorValue);
+			glUniform1f(zoomUniformID, zoomFactorValue);
+		}
+		
 	}
 
 
