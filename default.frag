@@ -1,5 +1,7 @@
 #version 330 core
 
+precision highp float;
+
 // function to generate cycling color palettes
 // https://iquilezles.org/articles/palettes/
 // http://dev.thi.ng/gradients/
@@ -37,20 +39,16 @@ void main()
 	// Fix the aspect ratio
 	uv0.x *= iResolution.x / iResolution.y;
 
-	float reZ = 0.0;
-	float imZ = 0.0;
-	float reZtemp = 0.0;
-	int	  iter = 0;
+	vec2 z;
+	int	 iter = 0;
 
-	while (reZ*reZ + imZ*imZ <= 2.0f && iter < maxIter)
+	while (dot(z,z) <= 65536.0f && iter < maxIter)
 	{
-		reZtemp = reZ*reZ - imZ*imZ + uv0.x;
-		imZ = 2*reZ*imZ + uv0.y;
-		reZ = reZtemp;
+		z = vec2(z.x*z.x - z.y*z.y, 2.0*z.x*z.y) + uv0;
 		iter += 1;
 	}
 
-	float col = float(iter)/float(maxIter);
+	float smoothIter = iter - log2(log2(dot(z,z))) + 4.0;
+	FragColor = vec4(1.0f - palette(smoothIter + 0.7*(iTime)), 1.0f);
 
-	FragColor = vec4( 1.0f - palette(col), 1.0f);
 }
